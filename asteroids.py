@@ -8,12 +8,14 @@ import pygame
 from pygame.event import Event
 from bullet import Bullet
 from ship import Ship
+import time
 
 class AsteroidsGame:
 
     def __init__(self):
+        self.__window = pygame.display.set_mode((0, 0), pygame.RESIZABLE, display=0)
         self.score: int = 0
-        self.ship: Ship = Ship()
+        self.ship: Ship = Ship(self.__window)
         self.asteroids = []
         self.bullets : list[Bullet] = []
         return
@@ -25,6 +27,7 @@ class AsteroidsGame:
 
         closing = False
         while not closing:
+            self.__window.fill((0,0,0))
             unhandledEvents: list[Event] = []
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -37,6 +40,8 @@ class AsteroidsGame:
             self.ship.update(unhandledEvents)
             for b in self.bullets:
                 b.update(unhandledEvents)
+            pygame.display.update()
+            time.sleep(.01)
         return
 
 pygame.init()
