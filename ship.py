@@ -17,8 +17,6 @@ class Ship:
         self.__isTurningCcw = False
         self.__isTurningCw = False
         self.__isAccelerating = False
-        self.__debugStart = time.time()
-        return
 
     def __draw(self) -> None:
         # pygame.draw.circle(ballImage, Drawing.BallColors[i], [x,y], Drawing.CircleRadius)
@@ -42,26 +40,22 @@ class Ship:
             elif event.type == pygame.KEYUP and event.key == pygame.K_w:
                 self.__isAccelerating = False
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_a:
-                print("A down")
                 self.__isTurningCcw = True
                 self.__isTurningCw = False
             elif event.type == pygame.KEYUP and event.key == pygame.K_a:
-                print("A up")
                 self.__isTurningCcw = False
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_d:
-                print("D down")
                 self.__isTurningCw = True
                 self.__isTurningCcw = False
             elif event.type == pygame.KEYUP and event.key == pygame.K_d:
-                print("D up")
                 self.__isTurningCw = False
             # elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
 
-            if self.__isAccelerating:
-                self.velocity.accelerate(Ship.__AccelerationRate)
-            if self.__isTurningCcw:
-                self.__direction -= Ship.__TurnRate
-            if self.__isTurningCw:
-                self.__direction += Ship.__TurnRate
+        if self.__isAccelerating:
+            self.velocity.accelerate(Ship.__AccelerationRate)
+        if self.__isTurningCcw:
+            self.__direction -= Ship.__TurnRate
+        if self.__isTurningCw:
+            self.__direction += Ship.__TurnRate
 
         self.__draw()

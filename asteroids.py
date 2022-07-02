@@ -42,7 +42,6 @@ class AsteroidsGame:
                 b.update(unhandledEvents)
             pygame.display.update()
             time.sleep(.01)
-        return
 
 pygame.init()
 pygame.font.init()
