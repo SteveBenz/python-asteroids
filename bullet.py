@@ -3,7 +3,6 @@ from coordinateSpace import Velocity
 import pygame
 from pygame.event import Event
 from pygame.surface import Surface
-import userEvents
 
 class Bullet:
     def __init__(self, window: Surface, point: GamePoint, velocity: Velocity):
@@ -19,12 +18,4 @@ class Bullet:
     def __draw(self) -> None:
         (cx, cy) = mapPoint(self.__position, self.__window)
         pygame.draw.circle(self.__window, (128,255,128), (cx,cy), 3)
-
-
-class BulletEvent(Event):
-    def __init__(self, b: Bullet, action: str):
-        super().__init__(userEvents.BULLET)
-        self.bullet = b
-        self.action = action
-
 

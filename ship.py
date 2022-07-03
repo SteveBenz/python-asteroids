@@ -1,14 +1,15 @@
 import pygame
 from pygame.event import Event
 from pygame.surface import Surface
-from bullet import Bullet, BulletEvent
+from bullet import Bullet
 from coordinateSpace import Velocity
 from coordinateSpace import GamePoint, mapPoint
+import userEvents
 
 class Ship:
     __AccelerationRate = .00002
     __TurnRate = 2
-    __BulletSpeed = .05
+    __BulletSpeed = .005
 
     def __init__(self, window: Surface):
         self.velocity: Velocity = Velocity()
@@ -37,7 +38,7 @@ class Ship:
     
     def __shoot(self) -> None:
         b = Bullet(self.__window, self.position, self.velocity.accelerate(Ship.__BulletSpeed, self.__direction))
-        pygame.event.post(BulletEvent(b, 'add'))
+        pygame.event.post(Event(userEvents.BULLET, **{'bullet': b, 'action': 'add' }))
 
     def update(self, events: list[Event]) -> None:
         for event in events:

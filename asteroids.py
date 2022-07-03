@@ -17,7 +17,7 @@
 
 import pygame
 from pygame.event import Event
-from bullet import Bullet, BulletEvent
+from bullet import Bullet
 from ship import Ship
 import time
 import userEvents
@@ -45,7 +45,6 @@ class AsteroidsGame:
                 if event.type == pygame.QUIT:
                     closing = True
                 elif event.type == userEvents.BULLET:
-                    assert isinstance(event, BulletEvent)
                     if event.action == 'add':
                         self.bullets.append(event.bullet)
                     else:
