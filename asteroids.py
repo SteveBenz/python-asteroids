@@ -4,8 +4,8 @@
 #  py -m pip install pygame_widgets
 
 # TODO:
-#   Fix the coordinate space so it's not width=height
 #   Make the ship shoot
+#   Fix the coordinate space so it's not width=height
 #   Make asteroids float around
 #   Make asteroids able to get shot
 #   Make the ship able to die
@@ -17,9 +17,10 @@
 
 import pygame
 from pygame.event import Event
-from bullet import Bullet
+from bullet import Bullet, BulletEvent
 from ship import Ship
 import time
+import userEvents
 
 class AsteroidsGame:
 
@@ -43,6 +44,13 @@ class AsteroidsGame:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     closing = True
+                elif event.type == userEvents.BULLET:
+                    assert isinstance(event, BulletEvent)
+                    if event.action == 'add':
+                        self.bullets.append(event.bullet)
+                    else:
+                        assert event.action == 'delete'
+                        self.bullets.remove(event.bullet)
                 # elif event.type == pygame.VIDEORESIZE:
                 #     self.__onResize()
                 # TODO: More if statements.

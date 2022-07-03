@@ -1,16 +1,19 @@
 import pygame
 from pygame.event import Event
 from pygame.surface import Surface
+from bullet import Bullet, BulletEvent
 from coordinateSpace import Velocity
 from coordinateSpace import GamePoint, mapPoint
 
 class Ship:
     __AccelerationRate = .00002
     __TurnRate = 2
+    __BulletSpeed = .05
 
     def __init__(self, window: Surface):
         self.velocity: Velocity = Velocity()
         self.position: GamePoint = (.5,.5)
+
         self.__window = window
         self.__direction = 0
         self.__isTurningCcw = False
@@ -31,6 +34,10 @@ class Ship:
 
         (cx, cy) = mapPoint(self.position, self.__window)
         self.__window.blit(shipImage, (cx - sizeX/2, cy - sizeY/2))
+    
+    def __shoot(self) -> None:
+        b = Bullet(self.__window, self.position, self.velocity.accelerate(Ship.__BulletSpeed, self.__direction))
+        pygame.event.post(BulletEvent(b, 'add'))
 
     def update(self, events: list[Event]) -> None:
         for event in events:
@@ -48,10 +55,11 @@ class Ship:
                 self.__isTurningCcw = False
             elif event.type == pygame.KEYUP and event.key == pygame.K_d:
                 self.__isTurningCw = False
-            # elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.__shoot()
 
         if self.__isAccelerating:
-            self.velocity.accelerate(Ship.__AccelerationRate, self.__direction)
+            self.velocity = self.velocity.accelerate(Ship.__AccelerationRate, self.__direction)
         if self.__isTurningCcw:
             self.__direction += Ship.__TurnRate
         if self.__isTurningCw:
