@@ -3,7 +3,6 @@ from pygame.event import Event
 from pygame.surface import Surface
 from coordinateSpace import Velocity
 from coordinateSpace import GamePoint, mapPoint
-import time
 
 class Ship:
     __AccelerationRate = .01
@@ -23,10 +22,10 @@ class Ship:
         (sizeX, sizeY) = mapPoint((.02,.02), self.__window)
         shipImage = pygame.Surface((sizeX, sizeY), pygame.SRCALPHA)
         pygame.draw.polygon(shipImage, (255,255,255),
-                    [(sizeX, sizeY/2), 
+                    [(sizeX, sizeY/2),
                     (0, sizeY/6),
                     (sizeX/10, sizeY/2),
-                    (0, 5*sizeY/6)], width=1)
+                    (0, 5*sizeY/6)], width=2)
         shipImage = pygame.transform.rotate(shipImage, -self.__direction)
         (sizeX, sizeY) = shipImage.get_size()
 
