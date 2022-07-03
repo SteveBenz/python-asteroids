@@ -5,11 +5,11 @@ from coordinateSpace import Velocity
 from coordinateSpace import GamePoint, mapPoint
 
 class Ship:
-    __AccelerationRate = .01
-    __TurnRate = 1
+    __AccelerationRate = .00002
+    __TurnRate = 2
 
     def __init__(self, window: Surface):
-        self.velocity: Velocity = Velocity(speed=0, direction=0)
+        self.velocity: Velocity = Velocity()
         self.position: GamePoint = (.5,.5)
         self.__window = window
         self.__direction = 0
@@ -26,7 +26,7 @@ class Ship:
                     (0, sizeY/6),
                     (sizeX/10, sizeY/2),
                     (0, 5*sizeY/6)], width=2)
-        shipImage = pygame.transform.rotate(shipImage, -self.__direction)
+        shipImage = pygame.transform.rotate(shipImage, self.__direction)
         (sizeX, sizeY) = shipImage.get_size()
 
         (cx, cy) = mapPoint(self.position, self.__window)
@@ -51,10 +51,10 @@ class Ship:
             # elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
 
         if self.__isAccelerating:
-            self.velocity.accelerate(Ship.__AccelerationRate)
+            self.velocity.accelerate(Ship.__AccelerationRate, self.__direction)
         if self.__isTurningCcw:
-            self.__direction -= Ship.__TurnRate
-        if self.__isTurningCw:
             self.__direction += Ship.__TurnRate
-
+        if self.__isTurningCw:
+            self.__direction -= Ship.__TurnRate
+        self.position = self.velocity.move(self.position)
         self.__draw()

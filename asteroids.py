@@ -1,8 +1,19 @@
 
-
 # To install requirements:
 #  py -m pip uninstall pygame
 #  py -m pip install pygame_widgets
+
+# TODO:
+#   Fix the coordinate space so it's not width=height
+#   Make the ship shoot
+#   Make asteroids float around
+#   Make asteroids able to get shot
+#   Make the ship able to die
+#   Keep score
+#   High Score
+#   Make the asteroids look better
+#   Make there be jet exhaust
+
 
 import pygame
 from pygame.event import Event
