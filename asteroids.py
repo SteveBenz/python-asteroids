@@ -32,6 +32,12 @@ class AsteroidsGame:
         self.bullets : list[Bullet] = []
         return
 
+    def __handleResize(self) -> None:
+        sz = self.__window.get_size()
+        ship.handleResize(sz)
+        for b in self.bullets:
+            b.handleResize(sz)
+
     def main(self) -> None:
         pygame.display.set_caption("Asteroids")
         # pygame.display.set_icon(pygame.image.load("icon.png"))
@@ -50,8 +56,8 @@ class AsteroidsGame:
                     else:
                         assert event.action == 'delete'
                         self.bullets.remove(event.bullet)
-                # elif event.type == pygame.VIDEORESIZE:
-                #     self.__onResize()
+                elif event.type == pygame.VIDEORESIZE:
+                    self.__handleResize()
                 # TODO: More if statements.
                 else:
                     unhandledEvents.append(event)
