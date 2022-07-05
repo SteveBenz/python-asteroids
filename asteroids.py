@@ -4,16 +4,15 @@
 #  py -m pip install pygame_widgets
 
 # TODO:
-#   Make asteroids float around
-#   Make asteroids able to get shot
 #   Make the ship able to die
 #   Keep score
 #   High Score
 #   Make the asteroids look better
 #   Make there be jet exhaust
+#   Make Big UFO's appear
+#   Make Small UFO's appear
+#   Make hyperspace move
 
-
-from optparse import Option
 from typing import Optional
 import pygame
 from pygame.event import Event
@@ -31,7 +30,7 @@ class AsteroidsGame:
         self.ship: Ship = Ship(self.__window)
         self.asteroids: list[Asteroid] = []
         for _ in range(8):
-            a = Asteroid(self.__window)
+            a = Asteroid.CreateStartAsteroid(self.__window)
             self.asteroids.append(a)
         self.bullets : list[Bullet] = []
         return

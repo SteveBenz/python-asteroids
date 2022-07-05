@@ -12,11 +12,45 @@ import userEvents
 class Asteroid:
     __StartSize = .005
     __StartSpeed = .0002
+    __BreakSpeed = .0001
 
-    def __init__(self, window: Surface, startSize: int = 8):
-        (cx,cy) = window.get_size()
+    def __init__(self, window: Surface, startSize: int, point: MovingPoint):
         self.__size = startSize
-        size = min(cx, cy) * Asteroid.__StartSize * self.__size
+        self.__position = point
+        self.__window = window
+
+    def __draw(self) -> None:
+        radius = self.__position.scale(self.__size * Asteroid.__StartSize)
+        pygame.draw.circle(self.__window, (128,128,128), self.__position.getPosition(), radius, 2)
+    
+    def update(self, events: list[Event]) -> None:
+        self.__position.coast()
+        self.__draw()
+
+    def checkForHits(self, bullet: Bullet) -> Optional[list[Asteroid]]:
+        radius = self.__position.scale(self.__size * Asteroid.__StartSize)
+        d = math.dist(self.__position.getPosition(), bullet.position)
+        if d < radius:
+            if self.__size == 1:
+                return []
+            else:
+                direction = random.random()*180
+                speed = self.__position.scale(Asteroid.__BreakSpeed)
+                m1 = self.__position.launch(speed, direction)
+                m2 = self.__position.launch(speed, direction+180)
+                newSize = self.__size // 2
+                return [Asteroid(self.__window, newSize, m1), Asteroid(self.__window, newSize, m2)]
+        else:
+            return None
+
+    def handleResize(self, size: ScreenSize) -> None:
+        self.__position.handleResize(size)
+
+    @staticmethod
+    def CreateStartAsteroid(window: Surface) -> Asteroid:
+        (cx,cy) = window.get_size()
+        startSize = 8
+        size = min(cx, cy) * Asteroid.__StartSize * startSize
 
         startSide = random.choice(['left', 'right', 'top', 'bottom'])
         if startSide == 'left':
@@ -50,28 +84,4 @@ class Asteroid:
         
         dx = Asteroid.__StartSpeed*cx*math.cos(math.radians(direction))
         dy = -Asteroid.__StartSpeed*cy*math.sin(math.radians(direction))
-        self.__position = MovingPoint(x, y, dx, dy, (cx,cy))
-        self.__window = window
-        self.__direction = 0
-
-    def __draw(self) -> None:
-        radius = self.__position.scale(self.__size * Asteroid.__StartSize)
-        pygame.draw.circle(self.__window, (128,128,128), self.__position.getPosition(), radius, 2)
-    
-    def update(self, events: list[Event]) -> None:
-        self.__position.coast()
-        self.__draw()
-
-    def checkForHits(self, bullet: Bullet) -> Optional[list[Asteroid]]:
-        radius = self.__position.scale(self.__size * Asteroid.__StartSize)
-        d = math.dist(self.__position.getPosition(), bullet.position)
-        if d < radius:
-            if self.__size == 1:
-                return []
-            else:
-                return [Asteroid(self.__window, self.__size//2), Asteroid(self.__window, self.__size//2)]
-        else:
-            return None
-
-    def handleResize(self, size: ScreenSize) -> None:
-        self.__position.handleResize(size)
+        return Asteroid(window, startSize, MovingPoint(x, y, dx, dy, (cx,cy)))
