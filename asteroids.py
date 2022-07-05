@@ -13,6 +13,8 @@
 #   Make there be jet exhaust
 
 
+from optparse import Option
+from typing import Optional
 import pygame
 from pygame.event import Event
 from Asteroid import Asteroid
@@ -69,6 +71,23 @@ class AsteroidsGame:
             for b in self.asteroids:
                 b.update(unhandledEvents)
             pygame.display.update()
+
+            newAsteroids: list[Asteroid] = []
+            deadAsteroids: list[Asteroid] = []
+            for a in self.asteroids:
+                deadBullet: Optional[Bullet] = None
+                for b in self.bullets:
+                    splits = a.checkForHits(b)
+                    if splits is not None:
+                        newAsteroids += splits
+                        deadAsteroids.append(a)
+                        deadBullet = b
+                if deadBullet:
+                    self.bullets.remove(deadBullet)
+            for a in deadAsteroids:
+                self.asteroids.remove(a)
+            self.asteroids += newAsteroids
+
             time.sleep(.01)
 
 pygame.init()

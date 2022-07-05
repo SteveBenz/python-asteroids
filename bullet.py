@@ -1,3 +1,4 @@
+from typing import Tuple
 from MovingPoint import MovingPoint, ScreenSize
 import pygame
 from pygame.event import Event
@@ -22,4 +23,8 @@ class Bullet:
     
     def __draw(self) -> None:
         pygame.draw.circle(self.__window, (128,255,128), self.__position.getPosition(), 3)
+    
+    @property
+    def position(self) -> Tuple[float,float]:
+        return self.__position.getPosition()
 

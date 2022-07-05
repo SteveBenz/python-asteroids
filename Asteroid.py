@@ -1,4 +1,6 @@
+from __future__ import annotations
 import math
+from typing import Optional
 import pygame
 import random
 from pygame.event import Event
@@ -11,9 +13,9 @@ class Asteroid:
     __StartSize = .005
     __StartSpeed = .0002
 
-    def __init__(self, window: Surface):
+    def __init__(self, window: Surface, startSize: int = 8):
         (cx,cy) = window.get_size()
-        self.__size = 8
+        self.__size = startSize
         size = min(cx, cy) * Asteroid.__StartSize * self.__size
 
         startSide = random.choice(['left', 'right', 'top', 'bottom'])
@@ -59,6 +61,17 @@ class Asteroid:
     def update(self, events: list[Event]) -> None:
         self.__position.coast()
         self.__draw()
+
+    def checkForHits(self, bullet: Bullet) -> Optional[list[Asteroid]]:
+        radius = self.__position.scale(self.__size * Asteroid.__StartSize)
+        d = math.dist(self.__position.getPosition(), bullet.position)
+        if d < radius:
+            if self.__size == 1:
+                return []
+            else:
+                return [Asteroid(self.__window, self.__size//2), Asteroid(self.__window, self.__size//2)]
+        else:
+            return None
 
     def handleResize(self, size: ScreenSize) -> None:
         self.__position.handleResize(size)
