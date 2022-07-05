@@ -4,8 +4,6 @@
 #  py -m pip install pygame_widgets
 
 # TODO:
-#   Make the ship shoot
-#   Fix the coordinate space so it's not width=height
 #   Make asteroids float around
 #   Make asteroids able to get shot
 #   Make the ship able to die
@@ -17,6 +15,7 @@
 
 import pygame
 from pygame.event import Event
+from Asteroid import Asteroid
 from bullet import Bullet
 from ship import Ship
 import time
@@ -28,7 +27,10 @@ class AsteroidsGame:
         self.__window = pygame.display.set_mode((0, 0), pygame.RESIZABLE, display=0)
         self.score: int = 0
         self.ship: Ship = Ship(self.__window)
-        self.asteroids = []
+        self.asteroids: list[Asteroid] = []
+        for _ in range(8):
+            a = Asteroid(self.__window)
+            self.asteroids.append(a)
         self.bullets : list[Bullet] = []
         return
 
@@ -63,6 +65,8 @@ class AsteroidsGame:
                     unhandledEvents.append(event)
             self.ship.update(unhandledEvents)
             for b in self.bullets:
+                b.update(unhandledEvents)
+            for b in self.asteroids:
                 b.update(unhandledEvents)
             pygame.display.update()
             time.sleep(.01)

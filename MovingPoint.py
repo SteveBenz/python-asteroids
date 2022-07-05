@@ -6,8 +6,7 @@ ScreenSize = Tuple[int, int]
 
 class MovingPoint:
     def __init__(self, x: float, y: float, dx: float, dy: float, screenSize: ScreenSize):
-        assert x >= 0 and x < screenSize[0]
-        assert y >= 0 and y < screenSize[1]
+        self.__isOffScreen = x < 0 or x >= screenSize[0] or y < 0 or y >= screenSize[1]
         self.__size = screenSize
         self.__x = x
         self.__y = y
@@ -30,8 +29,13 @@ class MovingPoint:
         self.__dy = self.__dy - amount * math.sin(directionInRadians)
     
     def coast(self) -> None:
-        self.__x = (self.__x + self.__dx) % self.__size[0]
-        self.__y = (self.__y + self.__dy) % self.__size[1]
+        if self.__isOffScreen:
+            self.__x += self.__dx
+            self.__y += self.__dy
+            self.__isOffScreen = self.__x < 0 or self.__x >= self.__size[0] or self.__y < 0 or self.__y >= self.__size[1]
+        else:
+            self.__x = (self.__x + self.__dx) % self.__size[0]
+            self.__y = (self.__y + self.__dy) % self.__size[1]
 
     def launch(self, amount: float, direction: float) -> MovingPoint:
         directionInRadians = direction*math.pi / 180

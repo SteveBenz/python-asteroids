@@ -21,7 +21,6 @@ class Ship:
         self.__isAccelerating = False
 
     def __draw(self) -> None:
-        # pygame.draw.circle(ballImage, Drawing.BallColors[i], [x,y], Drawing.CircleRadius)
         sizeX = sizeY = self.__position.scale(0.02)
         shipImage = pygame.Surface((sizeX,sizeY), pygame.SRCALPHA)
         pygame.draw.polygon(shipImage, (255,255,255),
