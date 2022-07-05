@@ -24,13 +24,27 @@ class Asteroid:
                 direction = -random.random()*80
             else:
                 direction = random.random()*80
-        else:
+        elif startSide == 'right':
             x = cx+size
             y = random.randint(0, cy)
             if y < cy/2:
                 direction = 180+random.random()*80
             else:
                 direction = 180-random.random()*80
+        elif startSide == 'top':
+            x = random.randint(0, cx)
+            y = -size
+            if x < cx/2:
+                direction = -(10+random.random()*80)
+            else:
+                direction = 180+(10+random.random()*80)
+        else:
+            x = random.randint(0,cx)
+            y = cy+size
+            if x < cx/2:
+                direction = 10+random.random()*80
+            else:
+                direction = 180-(10+random.random()*80)
         
         dx = Asteroid.__StartSpeed*cx*math.cos(math.radians(direction))
         dy = -Asteroid.__StartSpeed*cy*math.sin(math.radians(direction))
