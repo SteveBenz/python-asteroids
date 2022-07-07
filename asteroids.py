@@ -17,31 +17,26 @@
 #   Make a game-over button
 #   Make high scores
 
-from typing import Optional
 import pygame
 from pygame.event import Event
 from Asteroid import Asteroid
-from bullet import Bullet
+from GameObject import GameObject, AsteroidsEvent
 from ship import Ship
 import time
-import userEvents
 
 class AsteroidsGame:
 
     def __init__(self):
         self.__window = pygame.display.set_mode((0, 0), pygame.RESIZABLE, display=0)
-        self.score: int = 0
-        self.ship: Ship = Ship(self.__window)
-        self.asteroids: list[Asteroid] = []
+        self.__objects: list[GameObject] = []
+        self.__objects.append(Ship(self.__window))
         for _ in range(8):
             a = Asteroid.CreateStartAsteroid(self.__window)
-            self.asteroids.append(a)
-        self.bullets : list[Bullet] = []
+            self.__objects.append(a)
 
     def __handleResize(self) -> None:
         sz = self.__window.get_size()
-        self.ship.handleResize(sz)
-        for b in self.bullets:
+        for b in self.__objects:
             b.handleResize(sz)
 
     def main(self) -> None:
@@ -54,41 +49,40 @@ class AsteroidsGame:
             self.__window.fill((0,0,0))
             unhandledEvents: list[Event] = []
             for event in pygame.event.get():
+                asteroidsEvent = AsteroidsEvent.TryGetFromEvent(event)
                 if event.type == pygame.QUIT:
                     closing = True
-                elif event.type == userEvents.BULLET:
-                    if event.action == 'add':
-                        self.bullets.append(event.bullet)
-                    else:
-                        assert event.action == 'delete'
-                        self.bullets.remove(event.bullet)
                 elif event.type == pygame.VIDEORESIZE:
                     self.__handleResize()
-                # TODO: More if statements.
+                elif asteroidsEvent is not None:
+                    if asteroidsEvent.type == 'add':
+                        self.__objects.append(asteroidsEvent.object)
+                    elif asteroidsEvent.type == 'remove':
+                        self.__objects.remove(asteroidsEvent.object)
                 else:
                     unhandledEvents.append(event)
-            self.ship.update(unhandledEvents)
-            for b in self.bullets:
-                b.update(unhandledEvents)
-            for b in self.asteroids:
-                b.update(unhandledEvents)
+            for o in self.__objects:
+                o.update(unhandledEvents)
             pygame.display.update()
 
-            newAsteroids: list[Asteroid] = []
-            deadAsteroids: list[Asteroid] = []
-            for a in self.asteroids:
-                deadBullet: Optional[Bullet] = None
-                for b in self.bullets:
-                    splits = a.checkForHits(b)
-                    if splits is not None:
-                        newAsteroids += splits
-                        deadAsteroids.append(a)
-                        deadBullet = b
-                if deadBullet:
-                    self.bullets.remove(deadBullet)
-            for a in deadAsteroids:
-                self.asteroids.remove(a)
-            self.asteroids += newAsteroids
+            uncollidedStuff = [o for o in self.__objects]
+            i = 0
+            while i < len(uncollidedStuff):
+                oi = uncollidedStuff[i]
+                j = i+1
+                collisionHappened = False
+                while not collisionHappened and j < len(uncollidedStuff):
+                    oj = uncollidedStuff[j]
+                    if oi.checkForCollision(oj):
+                        oi.handleCollision(oj)
+                        oj.handleCollision(oi)
+                        uncollidedStuff.remove(oi)
+                        uncollidedStuff.remove(oj)
+                        collisionHappened = True
+                    else:
+                        j += 1
+                if not collisionHappened:
+                    i += 1
 
             time.sleep(.01)
 

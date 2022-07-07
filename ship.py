@@ -2,26 +2,32 @@ import pygame
 from pygame.event import Event
 from pygame.surface import Surface
 from bullet import Bullet
-from MovingPoint import MovingPoint, ScreenSize
-import userEvents
+from MovingPoint import MovingPoint
+from GameObject import MobileGameObject, AsteroidsEvent
 
-class Ship:
-    __AccelerationRate = .00002
+class Ship(MobileGameObject):
+    __AccelerationRate = 0.00002
     __TurnRate = 2
-    __BulletSpeed = .005
+    __BulletSpeed = 0.005
+    __ShipSize = 0.02
 
     def __init__(self, window: Surface):
         (cx,cy) = window.get_size()
-        self.__position = MovingPoint(cx/2, cy/2, 0, 0, (cx,cy))
-
+        super().__init__(MovingPoint(cx/2, cy/2, 0, 0, (cx,cy)))
         self.__window = window
         self.__direction = 0
         self.__isTurningCcw = False
         self.__isTurningCw = False
         self.__isAccelerating = False
 
-    def __draw(self) -> None:
-        sizeX = sizeY = self.__position.scale(0.02)
+    @property
+    def _radius(self) -> float:
+        # Note that radius is the one used for collisions - and we make the contact area just a bit smaller
+        # to not enrage players because the radius doesn't conform to the triangle of the ship
+        return self._position.scale(Ship.__ShipSize*.6)
+
+    def _draw(self) -> None:
+        sizeX = sizeY = self._position.scale(Ship.__ShipSize)
         shipImage = pygame.Surface((sizeX,sizeY), pygame.SRCALPHA)
         pygame.draw.polygon(shipImage, (255,255,255),
                     [(sizeX, sizeY/2),
@@ -30,12 +36,12 @@ class Ship:
                     (0, 5*sizeY/6)], width=2)
         shipImage = pygame.transform.rotate(shipImage, self.__direction)
         (sizeX, sizeY) = shipImage.get_size()
-        (cx,cy) = self.__position.getPosition()
+        (cx,cy) = self._position.getPosition()
         self.__window.blit(shipImage, (cx - sizeX/2, cy - sizeY/2))
     
     def __shoot(self) -> None:
-        b = Bullet(self.__window, self.__position.launch(self.__position.scale(Ship.__BulletSpeed), self.__direction))
-        pygame.event.post(Event(userEvents.BULLET, **{'bullet': b, 'action': 'add' }))
+        b = Bullet(self.__window, self._position.launch(self._position.scale(Ship.__BulletSpeed), self.__direction))
+        AsteroidsEvent.PostAddEvent(b)
 
     def update(self, events: list[Event]) -> None:
         for event in events:
@@ -57,13 +63,10 @@ class Ship:
                 self.__shoot()
 
         if self.__isAccelerating:
-            self.__position.accelerate(self.__position.scale(Ship.__AccelerationRate), self.__direction)
+            self._position.accelerate(self._position.scale(Ship.__AccelerationRate), self.__direction)
         if self.__isTurningCcw:
             self.__direction += Ship.__TurnRate
         if self.__isTurningCw:
             self.__direction -= Ship.__TurnRate
-        self.__position.coast()
-        self.__draw()
-
-    def handleResize(self, size: ScreenSize) -> None:
-        self.__position.handleResize(size)
+        
+        super().update(events)

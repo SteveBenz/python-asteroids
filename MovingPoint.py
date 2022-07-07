@@ -4,6 +4,7 @@ import math
 
 ScreenSize = Tuple[int, int]
 
+
 class MovingPoint:
     def __init__(self, x: float, y: float, dx: float, dy: float, screenSize: ScreenSize):
         self.__isOffScreen = x < 0 or x >= screenSize[0] or y < 0 or y >= screenSize[1]
@@ -12,6 +13,10 @@ class MovingPoint:
         self.__y = y
         self.__dx = dx
         self.__dy = dy
+    
+    @property
+    def collisionRadius(self) -> float:
+        return 0
     
     def handleResize(self, newSize: Tuple[int,int]) -> None:
         self.__x *= newSize[0] / self.__size[0]

@@ -1,50 +1,42 @@
 from __future__ import annotations
 import math
-from typing import Optional
 import pygame
 import random
 from pygame.event import Event
 from pygame.surface import Surface
-from bullet import Bullet
-from MovingPoint import MovingPoint, ScreenSize
-import userEvents
+from MovingPoint import MovingPoint
+from GameObject import GameObject, MobileGameObject, AsteroidsEvent
 
-class Asteroid:
+class Asteroid(MobileGameObject):
     __StartSize = .005
     __StartSpeed = .0002
     __BreakSpeed = .0001
 
-    def __init__(self, window: Surface, startSize: int, point: MovingPoint):
+    def __init__(self, window: Surface, startSize: int, position: MovingPoint):
+        super().__init__(position)
         self.__size = startSize
-        self.__position = point
         self.__window = window
 
-    def __draw(self) -> None:
-        radius = self.__position.scale(self.__size * Asteroid.__StartSize)
-        pygame.draw.circle(self.__window, (128,128,128), self.__position.getPosition(), radius, 2)
+    @property
+    def _radius(self) -> float:
+        return self._position.scale(self.__size * Asteroid.__StartSize)
+
+    def _draw(self) -> None:
+        pygame.draw.circle(self.__window, (128,128,128), self._position.getPosition(), self._radius, 2)
     
     def update(self, events: list[Event]) -> None:
-        self.__position.coast()
-        self.__draw()
+        super().update(events)
 
-    def checkForHits(self, bullet: Bullet) -> Optional[list[Asteroid]]:
-        radius = self.__position.scale(self.__size * Asteroid.__StartSize)
-        d = math.dist(self.__position.getPosition(), bullet.position)
-        if d < radius:
-            if self.__size == 1:
-                return []
-            else:
-                direction = random.random()*180
-                speed = self.__position.scale(Asteroid.__BreakSpeed)
-                m1 = self.__position.launch(speed, direction)
-                m2 = self.__position.launch(speed, direction+180)
-                newSize = self.__size // 2
-                return [Asteroid(self.__window, newSize, m1), Asteroid(self.__window, newSize, m2)]
-        else:
-            return None
-
-    def handleResize(self, size: ScreenSize) -> None:
-        self.__position.handleResize(size)
+    def handleCollision(self, impactedWith: GameObject) -> None:
+        super().handleCollision(impactedWith)
+        if self.__size > 1:
+            direction = random.random()*180
+            speed = self._position.scale(Asteroid.__BreakSpeed)
+            m1 = self._position.launch(speed, direction)
+            m2 = self._position.launch(speed, direction+180)
+            newSize = self.__size // 2
+            AsteroidsEvent.PostAddEvent(Asteroid(self.__window, newSize, m1))
+            AsteroidsEvent.PostAddEvent(Asteroid(self.__window, newSize, m2))
 
     @staticmethod
     def CreateStartAsteroid(window: Surface) -> Asteroid:
