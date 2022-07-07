@@ -4,14 +4,18 @@
 #  py -m pip install pygame_widgets
 
 # TODO:
-#   Make the ship able to die
-#   Keep score
-#   High Score
 #   Make the asteroids look better
 #   Make there be jet exhaust
+#   Make the ship able to die
+#   Recognize no more asteroids and start a new wave
+#   Keep score
+#   High Score
+#   Make sounds
+#   Make hyperspace button
 #   Make Big UFO's appear
 #   Make Small UFO's appear
-#   Make hyperspace move
+#   Make a game-over button
+#   Make high scores
 
 from typing import Optional
 import pygame
@@ -33,11 +37,10 @@ class AsteroidsGame:
             a = Asteroid.CreateStartAsteroid(self.__window)
             self.asteroids.append(a)
         self.bullets : list[Bullet] = []
-        return
 
     def __handleResize(self) -> None:
         sz = self.__window.get_size()
-        ship.handleResize(sz)
+        self.ship.handleResize(sz)
         for b in self.bullets:
             b.handleResize(sz)
 
