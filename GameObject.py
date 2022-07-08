@@ -3,6 +3,7 @@ from pygame.event import Event
 from MovingPoint import MovingPoint, ScreenSize
 from typing import Literal, Optional
 import pygame
+from pygame.surface import Surface
 import math
 
 class GameObject:
@@ -25,10 +26,11 @@ class GameObject:
 Factions = Literal['player', 'asteroids', 'aliens']
 
 class MobileGameObject(GameObject):
-    def __init__(self, faction: Factions, position: MovingPoint):
+    def __init__(self, window: Surface, faction: Factions, position: MovingPoint):
         super().__init__()
         self._position = position
         self.__faction = faction
+        self._window = window
     
     @property
     def _radius(self) -> float:
@@ -36,16 +38,15 @@ class MobileGameObject(GameObject):
     
     def update(self, events: list[Event]) -> None:
         self._position.coast()
+        for event in events:
+            if event.type == pygame.VIDEORESIZE:
+                self._position.handleResize(self._window.get_size())
         super().update(events)
 
     def checkForCollision(self, other: GameObject) -> bool:
         return isinstance(other, MobileGameObject) \
            and self.__faction != other.__faction \
            and math.dist(self._position.getPosition(), other._position.getPosition()) < other._radius + self._radius
-
-    def handleResize(self, size: ScreenSize) -> None:
-        self._position.handleResize(size)
-
 
 EventTypes = Literal['add', 'remove']
 

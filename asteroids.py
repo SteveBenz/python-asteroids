@@ -7,7 +7,6 @@
 #   Make the asteroids look better
 #   Make there be jet exhaust
 #   Make the ship able to die
-#   Refactor to get rid of the special handleResize method
 #   Recognize no more asteroids and start a new wave
 #   Keep score
 #   High Score
@@ -37,18 +36,11 @@ class AsteroidsGame:
             self.__objects.append(a)
         self.__closing = False
 
-    def __handleResize(self) -> None:
-        sz = self.__window.get_size()
-        for b in self.__objects:
-            b.handleResize(sz)
-
     def __update(self, events: list[Event]) -> None:
         for event in events:
             asteroidsEvent = AsteroidsEvent.TryGetFromEvent(event)
             if event.type == pygame.QUIT:
                 self.__closing = True
-            elif event.type == pygame.VIDEORESIZE:
-                self.__handleResize()
             elif asteroidsEvent is not None:
                 if asteroidsEvent.type == 'add':
                     self.__objects.append(asteroidsEvent.object)

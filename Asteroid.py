@@ -13,16 +13,15 @@ class Asteroid(MobileGameObject):
     __BreakSpeed = .0001
 
     def __init__(self, window: Surface, startSize: int, position: MovingPoint):
-        super().__init__('asteroids', position)
+        super().__init__(window, 'asteroids', position)
         self.__size = startSize
-        self.__window = window
 
     @property
     def _radius(self) -> float:
         return self._position.scale(self.__size * Asteroid.__StartSize)
 
     def _draw(self) -> None:
-        pygame.draw.circle(self.__window, (128,128,128), self._position.getPosition(), self._radius, 2)
+        pygame.draw.circle(self._window, (128,128,128), self._position.getPosition(), self._radius, 2)
     
     def update(self, events: list[Event]) -> None:
         super().update(events)
@@ -35,8 +34,8 @@ class Asteroid(MobileGameObject):
             m1 = self._position.launch(speed, direction)
             m2 = self._position.launch(speed, direction+180)
             newSize = self.__size // 2
-            AsteroidsEvent.PostAddEvent(Asteroid(self.__window, newSize, m1))
-            AsteroidsEvent.PostAddEvent(Asteroid(self.__window, newSize, m2))
+            AsteroidsEvent.PostAddEvent(Asteroid(self._window, newSize, m1))
+            AsteroidsEvent.PostAddEvent(Asteroid(self._window, newSize, m2))
 
     @staticmethod
     def CreateStartAsteroid(window: Surface) -> Asteroid:

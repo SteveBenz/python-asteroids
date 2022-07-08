@@ -7,8 +7,7 @@ import time
 
 class Bullet(MobileGameObject):
     def __init__(self, window: Surface, faction: Factions, position: MovingPoint):
-        super().__init__(faction, position)
-        self.__window = window
+        super().__init__(window, faction, position)
         self.__endTime = time.time() + 3 #  Our bullets last 3 seconds
 
     @property
@@ -21,5 +20,5 @@ class Bullet(MobileGameObject):
             AsteroidsEvent.PostRemoveEvent(self)
 
     def _draw(self) -> None:
-        pygame.draw.circle(self.__window, (128,255,128), self._position.getPosition(), self._radius)
+        pygame.draw.circle(self._window, (128,255,128), self._position.getPosition(), self._radius)
 
