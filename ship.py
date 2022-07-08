@@ -13,7 +13,7 @@ class Ship(MobileGameObject):
 
     def __init__(self, window: Surface):
         (cx,cy) = window.get_size()
-        super().__init__(MovingPoint(cx/2, cy/2, 0, 0, (cx,cy)))
+        super().__init__('player', MovingPoint(cx/2, cy/2, 0, 0, (cx,cy)))
         self.__window = window
         self.__direction = 0
         self.__isTurningCcw = False
@@ -40,7 +40,7 @@ class Ship(MobileGameObject):
         self.__window.blit(shipImage, (cx - sizeX/2, cy - sizeY/2))
     
     def __shoot(self) -> None:
-        b = Bullet(self.__window, self._position.launch(self._position.scale(Ship.__BulletSpeed), self.__direction))
+        b = Bullet(self.__window, 'player', self._position.launch(self._position.scale(Ship.__BulletSpeed), self.__direction))
         AsteroidsEvent.PostAddEvent(b)
 
     def update(self, events: list[Event]) -> None:

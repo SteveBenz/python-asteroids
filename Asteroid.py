@@ -13,7 +13,7 @@ class Asteroid(MobileGameObject):
     __BreakSpeed = .0001
 
     def __init__(self, window: Surface, startSize: int, position: MovingPoint):
-        super().__init__(position)
+        super().__init__('asteroids', position)
         self.__size = startSize
         self.__window = window
 

@@ -22,10 +22,13 @@ class GameObject:
     def handleResize(self, size: ScreenSize) -> None:
         return
 
+Factions = Literal['player', 'asteroids', 'aliens']
+
 class MobileGameObject(GameObject):
-    def __init__(self, position: MovingPoint):
+    def __init__(self, faction: Factions, position: MovingPoint):
         super().__init__()
         self._position = position
+        self.__faction = faction
     
     @property
     def _radius(self) -> float:
@@ -36,9 +39,9 @@ class MobileGameObject(GameObject):
         super().update(events)
 
     def checkForCollision(self, other: GameObject) -> bool:
-        if not isinstance(other, MobileGameObject):
-            return False
-        return math.dist(self._position.getPosition(), other._position.getPosition()) < other._radius + self._radius
+        return isinstance(other, MobileGameObject) \
+           and self.__faction != other.__faction \
+           and math.dist(self._position.getPosition(), other._position.getPosition()) < other._radius + self._radius
 
     def handleResize(self, size: ScreenSize) -> None:
         self._position.handleResize(size)
@@ -59,13 +62,16 @@ class AsteroidsEvent:
     def object(self) -> GameObject:
         return self.__object
 
+    def __post(self) -> None:
+        pygame.event.post(Event(pygame.USEREVENT, **{'eventData': self}))
+
     @staticmethod
     def PostAddEvent(o: GameObject) -> None:
-        pygame.event.post(Event(pygame.USEREVENT, **{'eventData': AsteroidsEvent('add', o)}))
+        AsteroidsEvent('add', o).__post()
 
     @staticmethod
     def PostRemoveEvent(o: GameObject) -> None:
-        pygame.event.post(Event(pygame.USEREVENT, **{'eventData': AsteroidsEvent('remove', o)}))
+        AsteroidsEvent('remove', o).__post()
 
     @staticmethod
     def TryGetFromEvent(e: Event) -> Optional[AsteroidsEvent]:

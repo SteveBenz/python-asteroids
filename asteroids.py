@@ -33,58 +33,59 @@ class AsteroidsGame:
         for _ in range(8):
             a = Asteroid.CreateStartAsteroid(self.__window)
             self.__objects.append(a)
+        self.__closing = False
 
     def __handleResize(self) -> None:
         sz = self.__window.get_size()
         for b in self.__objects:
             b.handleResize(sz)
 
+    def __update(self, events: list[Event]) -> None:
+        for event in events:
+            asteroidsEvent = AsteroidsEvent.TryGetFromEvent(event)
+            if event.type == pygame.QUIT:
+                self.__closing = True
+            elif event.type == pygame.VIDEORESIZE:
+                self.__handleResize()
+            elif asteroidsEvent is not None:
+                if asteroidsEvent.type == 'add':
+                    self.__objects.append(asteroidsEvent.object)
+                elif asteroidsEvent.type == 'remove':
+                    self.__objects.remove(asteroidsEvent.object)
+        for o in self.__objects:
+            o.update(events)
+
+    def __checkCollisions(self):
+        uncollidedStuff = [o for o in self.__objects]
+        i = 0
+        while i < len(uncollidedStuff):
+            oi = uncollidedStuff[i]
+            j = i+1
+            collisionHappened = False
+            while not collisionHappened and j < len(uncollidedStuff):
+                oj = uncollidedStuff[j]
+                if oi.checkForCollision(oj):
+                    oi.handleCollision(oj)
+                    oj.handleCollision(oi)
+                    uncollidedStuff.remove(oi)
+                    uncollidedStuff.remove(oj)
+                    collisionHappened = True
+                else:
+                    j += 1
+            if not collisionHappened:
+                i += 1
+
     def main(self) -> None:
         pygame.display.set_caption("Asteroids")
         # pygame.display.set_icon(pygame.image.load("icon.png"))
-        pygame.display.update()
 
-        closing = False
-        while not closing:
+        while not self.__closing:
             self.__window.fill((0,0,0))
-            unhandledEvents: list[Event] = []
-            for event in pygame.event.get():
-                asteroidsEvent = AsteroidsEvent.TryGetFromEvent(event)
-                if event.type == pygame.QUIT:
-                    closing = True
-                elif event.type == pygame.VIDEORESIZE:
-                    self.__handleResize()
-                elif asteroidsEvent is not None:
-                    if asteroidsEvent.type == 'add':
-                        self.__objects.append(asteroidsEvent.object)
-                    elif asteroidsEvent.type == 'remove':
-                        self.__objects.remove(asteroidsEvent.object)
-                else:
-                    unhandledEvents.append(event)
-            for o in self.__objects:
-                o.update(unhandledEvents)
+            self.__update(pygame.event.get())
             pygame.display.update()
-
-            uncollidedStuff = [o for o in self.__objects]
-            i = 0
-            while i < len(uncollidedStuff):
-                oi = uncollidedStuff[i]
-                j = i+1
-                collisionHappened = False
-                while not collisionHappened and j < len(uncollidedStuff):
-                    oj = uncollidedStuff[j]
-                    if oi.checkForCollision(oj):
-                        oi.handleCollision(oj)
-                        oj.handleCollision(oi)
-                        uncollidedStuff.remove(oi)
-                        uncollidedStuff.remove(oj)
-                        collisionHappened = True
-                    else:
-                        j += 1
-                if not collisionHappened:
-                    i += 1
-
+            self.__checkCollisions()
             time.sleep(.01)
+
 
 pygame.init()
 pygame.font.init()

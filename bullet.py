@@ -1,13 +1,13 @@
 from MovingPoint import MovingPoint
-from GameObject import MobileGameObject, AsteroidsEvent
+from GameObject import MobileGameObject, AsteroidsEvent, Factions
 import pygame
 from pygame.event import Event
 from pygame.surface import Surface
 import time
 
 class Bullet(MobileGameObject):
-    def __init__(self, window: Surface, position: MovingPoint):
-        super().__init__(position)
+    def __init__(self, window: Surface, faction: Factions, position: MovingPoint):
+        super().__init__(faction, position)
         self.__window = window
         self.__endTime = time.time() + 3 #  Our bullets last 3 seconds
 
