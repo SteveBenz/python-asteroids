@@ -7,6 +7,7 @@
 #   Make the asteroids look better
 #   Make there be jet exhaust
 #   Make the ship able to die
+#   Refactor to get rid of the special handleResize method
 #   Recognize no more asteroids and start a new wave
 #   Keep score
 #   High Score
@@ -21,14 +22,15 @@ import pygame
 from pygame.event import Event
 from Asteroid import Asteroid
 from GameObject import GameObject, AsteroidsEvent
+from Score import Score
 from ship import Ship
 import time
 
 class AsteroidsGame:
-
     def __init__(self):
         self.__window = pygame.display.set_mode((0, 0), pygame.RESIZABLE, display=0)
         self.__objects: list[GameObject] = []
+        self.__objects.append(Score(self.__window))
         self.__objects.append(Ship(self.__window))
         for _ in range(8):
             a = Asteroid.CreateStartAsteroid(self.__window)
