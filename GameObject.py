@@ -103,7 +103,7 @@ class MobileGameObject(GameObject):
         super().handleCollision(impactedWith)
         if self._debrisType != 'none':
             for _ in range(12 if self._debrisType == 'dots' else 6):
-                trajectory = self._position.launch(0.2 + random.random()*.2, random.random()*360)
+                trajectory = self._position.launch(0.5 + random.random()*.5, random.random()*360)
                 d = DotDebris(self._window, trajectory) if self._debrisType == 'dots' else LineDebris(self._window, trajectory, self._position.scale(.003))
                 AsteroidsEvent.PostAddEvent(d)
 
