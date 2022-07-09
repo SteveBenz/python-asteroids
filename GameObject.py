@@ -23,7 +23,7 @@ class GameObject:
     def handleResize(self, size: ScreenSize) -> None:
         return
 
-Factions = Literal['player', 'asteroids', 'aliens']
+Factions = Literal['player', 'asteroids', 'aliens', 'debris']
 
 class MobileGameObject(GameObject):
     def __init__(self, window: Surface, faction: Factions, position: MovingPoint):
@@ -46,6 +46,7 @@ class MobileGameObject(GameObject):
     def checkForCollision(self, other: GameObject) -> bool:
         return isinstance(other, MobileGameObject) \
            and self.__faction != other.__faction \
+           and other.__faction != 'debris' \
            and math.dist(self._position.getPosition(), other._position.getPosition()) < other._radius + self._radius
 
 EventTypes = Literal['add', 'remove']

@@ -6,6 +6,7 @@ from pygame.event import Event
 from pygame.surface import Surface
 from MovingPoint import MovingPoint
 from GameObject import GameObject, MobileGameObject, AsteroidsEvent
+from Debris import Debris
 
 class Asteroid(MobileGameObject):
     __StartSize = .005
@@ -36,6 +37,10 @@ class Asteroid(MobileGameObject):
             newSize = self.__size // 2
             AsteroidsEvent.PostAddEvent(Asteroid(self._window, newSize, m1))
             AsteroidsEvent.PostAddEvent(Asteroid(self._window, newSize, m2))
+        for _ in range(8):
+            trajectory = self._position.launch(0.2 + random.random()*.2, random.random()*360)
+            AsteroidsEvent.PostAddEvent(Debris(self._window, trajectory))
+    
 
     @staticmethod
     def CreateStartAsteroid(window: Surface) -> Asteroid:

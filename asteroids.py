@@ -4,19 +4,22 @@
 #  py -m pip install pygame_widgets
 
 # TODO:
-#   Make the ship able to die
-#   Recognize no more asteroids and start a new wave
-#     "Start"
-#     "Game Over"
 #   Crash animation
-#   Keep score
-#   Make the asteroids look better
-#   Make there be jet exhaust
-#   High Score
+#   Sparkles animation when asteroid gets shot
+#   Send in a new batch of asteroids when wave is cleared
 #   Make sounds
+#   Make the asteroids look better
+#   High Score
 #   Make hyperspace button
 #   Make Big UFO's appear
 #   Make Small UFO's appear
+#
+# TickyTack:
+#   Make there be jet exhaust
+#   Score more for different asteroids
+#   Shouldn't score for asteroids blown up by aliens?
+#   Asteroids get blown into 8 parts, not 16
+#   Ship should have friction
 
 import pygame
 from pygame.event import Event
