@@ -9,6 +9,7 @@ class Bullet(MobileGameObject):
     def __init__(self, window: Surface, faction: Factions, position: MovingPoint):
         super().__init__(window, faction, position)
         self.__endTime = time.time() + 3 #  Our bullets last 3 seconds
+        self._debrisType = 'none'
 
     @property
     def _radius(self) -> float:

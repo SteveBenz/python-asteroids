@@ -18,6 +18,7 @@ class Ship(MobileGameObject):
         self.__isTurningCcw = False
         self.__isTurningCw = False
         self.__isAccelerating = False
+        self._debrisType = 'lines'
 
     @property
     def _radius(self) -> float:
