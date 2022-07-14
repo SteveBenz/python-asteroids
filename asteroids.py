@@ -16,7 +16,6 @@
 # TickyTack:
 #   Score more for different asteroids
 #   Shouldn't score for asteroids blown up by aliens?
-#   Asteroids get blown into 8 parts, not 16
 #   Ship should have friction
 
 import pygame
