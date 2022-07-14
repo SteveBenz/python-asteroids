@@ -35,7 +35,7 @@ class Asteroid(MobileGameObject):
             m2 = self._position.launch(speed, direction+180)
             newSize = self.__size // 2
             AsteroidsEvent.PostAddEvent(Asteroid(self._window, newSize, m1))
-            AsteroidsEvent.PostAddEvent(Asteroid(self._window, newSize, m2))
+            AsteroidsEvent.PostAddEvent(Asteroid(self._window, newSize, m2))    
 
     @staticmethod
     def CreateStartAsteroid(window: Surface) -> Asteroid:
