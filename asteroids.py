@@ -11,9 +11,9 @@
 #   Make the asteroids look better
 #   High Score
 #   Make hyperspace button
+#   Make there be jet exhaust that you can actually see
 #
 # TickyTack:
-#   Make there be jet exhaust
 #   Score more for different asteroids
 #   Shouldn't score for asteroids blown up by aliens?
 #   Asteroids get blown into 8 parts, not 16
@@ -68,7 +68,7 @@ class AsteroidsGame:
             asteroidsEvent = AsteroidsEvent.TryGetFromEvent(event)
             if event.type == pygame.QUIT:
                 self.__closing = True
-            elif event.type == pygame.KEYDOWN and (event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER):
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == pygame.BUTTON_LEFT:
                 self.__startPressed()
             elif asteroidsEvent is not None:
                 if asteroidsEvent.type == 'add':
