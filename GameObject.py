@@ -71,12 +71,8 @@ class LineDebris(Debris):
             (cx-math.cos(self._angle)*self._lineLength,cy-math.sin(self._angle)*self._lineLength),
             (cx+math.cos(self._angle)*self._lineLength,cy+math.sin(self._angle)*self._lineLength), 3)
 
-
-
-Factions = Literal['player', 'asteroids', 'aliens']
-
 class MobileGameObject(GameObject):
-    def __init__(self, window: Surface, faction: Factions, position: MovingPoint):
+    def __init__(self, window: Surface, faction: Literal['player', 'asteroids', 'aliens'], position: MovingPoint):
         super().__init__()
         self._position = position
         self.__faction = faction

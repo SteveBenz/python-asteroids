@@ -4,15 +4,13 @@
 #  py -m pip install pygame_widgets
 
 # TODO:
-#   Crash animation
-#   Sparkles animation when asteroid gets shot
-#   Send in a new batch of asteroids when wave is cleared
+#   Make Big UFO's appear
+#   Make Small UFO's appear
 #   Make sounds
+#   Send in a new batch of asteroids when wave is cleared
 #   Make the asteroids look better
 #   High Score
 #   Make hyperspace button
-#   Make Big UFO's appear
-#   Make Small UFO's appear
 #
 # TickyTack:
 #   Make there be jet exhaust
