@@ -45,7 +45,7 @@ class AsteroidsGame:
                 if asteroidsEvent.type == 'add':
                     self.__objects.append(asteroidsEvent.object)
                 elif asteroidsEvent.type == 'remove':
-                    self.__objects.remove(asteroidsEvent.object)
+                    self.__objects.remove(asteroidsEvent.object)    #   Bug here (list.remove(x): x not in list)
         for o in self.__objects:
             o.update(events)
 

@@ -28,11 +28,20 @@ class Ship(MobileGameObject):
     def _draw(self) -> None:
         sizeX = sizeY = self._position.scale(Ship.__ShipSize)
         shipImage = pygame.Surface((sizeX,sizeY), pygame.SRCALPHA)
-        pygame.draw.polygon(shipImage, (255,255,255),
-                    [(sizeX, sizeY/2),
-                    (0, sizeY/6),
-                    (sizeX/10, sizeY/2),
-                    (0, 5*sizeY/6)], width=2)
+        if self.__isAccelerating == False:
+            pygame.draw.polygon(shipImage, (255,255,255),
+                        [(sizeX, sizeY/2),
+                        (0, sizeY/6),
+                        (sizeX/10, sizeY/2),
+                        (0, 5*sizeY/6)], width=2)
+        else:
+            pygame.draw.polygon(shipImage, (255,255,255),
+                        [(sizeX, sizeY/2),
+                        (0, sizeY/6),
+                        (sizeX/10, sizeY/2),
+                        (0, 5*sizeY/6),
+                        (0, sizeY/6),
+                        (0, 5*sizeY/6)], width=2)
         shipImage = pygame.transform.rotate(shipImage, self.__direction)
         (sizeX, sizeY) = shipImage.get_size()
         (cx,cy) = self._position.getPosition()
