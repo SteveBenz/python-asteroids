@@ -8,7 +8,7 @@ from MovingPoint import MovingPoint
 from GameObject import GameObject, MobileGameObject, AsteroidsEvent
 
 class Asteroid(MobileGameObject):
-    __StartSize = .005
+    __StartSize = .01
     __StartSpeed = .0002
     __BreakSpeed = .0001
 
@@ -40,7 +40,7 @@ class Asteroid(MobileGameObject):
     @staticmethod
     def CreateStartAsteroid(window: Surface) -> Asteroid:
         (cx,cy) = window.get_size()
-        startSize = 8
+        startSize = 4
         size = min(cx, cy) * Asteroid.__StartSize * startSize
 
         startSide = random.choice(['left', 'right', 'top', 'bottom'])

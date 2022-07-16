@@ -77,5 +77,5 @@ class Ship(MobileGameObject):
             self.__direction += Ship.__TurnRate
         if self.__isTurningCw:
             self.__direction -= Ship.__TurnRate
-        
+        self._position.friction()
         super().update(events)
