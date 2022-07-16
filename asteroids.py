@@ -14,9 +14,7 @@
 #   Make there be jet exhaust that you can actually see
 #
 # TickyTack:
-#   Score more for different asteroids
 #   Shouldn't score for asteroids blown up by aliens?
-#   Ship should have friction
 
 import pygame
 from pygame.event import Event
