@@ -17,7 +17,7 @@ class Score(GameObject):
             if asteroidEvent and asteroidEvent.type == 'remove':
                 o = asteroidEvent.object
                 if isinstance(o, Asteroid):
-                    self.__score += 15
+                    self.__score += o.getScore()
         self._draw()
     
     def _draw(self) -> None:
