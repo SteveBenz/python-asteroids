@@ -21,6 +21,7 @@ from pygame.event import Event
 from Asteroid import Asteroid
 from GameObject import GameObject, AsteroidsEvent
 from Score import Score
+from aliens import Alien
 from ship import Ship
 from pygame.font import SysFont
 import time
@@ -42,6 +43,7 @@ class AsteroidsGame:
         self.__objects.clear()
         self.__objects.append(Score(self.__window))
         self.__objects.append(Ship(self.__window))
+        self.__objects.append(Alien(self.__window))
         for _ in range(1):
             a = Asteroid.CreateStartAsteroid(self.__window)
             self.__objects.append(a)
