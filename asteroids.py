@@ -7,7 +7,7 @@
 #   Make Big UFO's appear
 #   Make Small UFO's appear
 #   Make sounds
-#   Send in a new batch of asteroids when wave is cleared
+#   Give bonus for wave clear
 #   Make the asteroids look better
 #   High Score
 #   Make hyperspace button
@@ -42,7 +42,7 @@ class AsteroidsGame:
         self.__objects.clear()
         self.__objects.append(Score(self.__window))
         self.__objects.append(Ship(self.__window))
-        for _ in range(8):
+        for _ in range(1):
             a = Asteroid.CreateStartAsteroid(self.__window)
             self.__objects.append(a)
         return
@@ -116,7 +116,13 @@ class AsteroidsGame:
                     j += 1
             if not collisionHappened:
                 i += 1
-
+    
+    def __checkIfWaveCleared(self) -> None:
+        if not any([x for x in self.__objects if isinstance(x, Asteroid)]):
+            for _ in range(8):
+                a = Asteroid.CreateStartAsteroid(self.__window)
+                self.__objects.append(a)
+    
     def main(self) -> None:
         pygame.display.set_caption("Asteroids")
         # pygame.display.set_icon(pygame.image.load("icon.png"))
@@ -126,6 +132,8 @@ class AsteroidsGame:
             self.__update(pygame.event.get())
             pygame.display.update()
             self.__checkCollisions()
+            if self.__livesCount > 0:
+                self.__checkIfWaveCleared()
             time.sleep(.01)
 
 

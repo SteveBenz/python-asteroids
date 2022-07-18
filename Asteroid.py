@@ -24,7 +24,7 @@ class Asteroid(MobileGameObject):
         pygame.draw.circle(self._window, (128,128,128), self._position.getPosition(), self._radius, 2)
     
     def getScore(self) -> int:
-a         return self.__size*15
+         return self.__size*15
 
 
     def update(self, events: list[Event]) -> None:
