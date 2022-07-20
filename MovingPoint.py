@@ -43,7 +43,7 @@ class MovingPoint:
             self.__y = (self.__y + self.__dy) % self.__size[1]
 
     def launch(self, amount: float, direction: float) -> MovingPoint:
-        directionInRadians = direction*math.pi / 180
+        directionInRadians = math.radians(direction)
         dx = self.__dx + amount * math.cos(directionInRadians)
         dy = self.__dy - amount * math.sin(directionInRadians)
         return MovingPoint(self.__x, self.__y, dx, dy, self.__size)
@@ -51,6 +51,11 @@ class MovingPoint:
     def friction(self) -> None:
         self.__dx = self.__dx * .995
         self.__dy = self.__dy * .995
+
+    def setSpeed(self, direction: float, speed: float) -> None:
+        directionInRadians = math.radians(direction)
+        self.__dx = math.cos(directionInRadians)*speed
+        self.__dy = math.sin(directionInRadians)*speed
     
     def scale(self, fractionalAmount: float) -> float:
         return min(self.__size[0], self.__size[1])*fractionalAmount

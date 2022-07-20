@@ -9,12 +9,15 @@ from GameObject import MobileGameObject, AsteroidsEvent
 class Alien(MobileGameObject):
     __BulletSpeed = 0.005
     __ShipSize = 0.02
+    __Speed = .001
 
     def __init__(self, window: Surface):
         (cx,cy) = window.get_size()
         super().__init__(window, 'aliens', MovingPoint(cx/4, cy/4, 0, 0, (cx,cy)))
         self._debrisType = 'lines'
-
+        speed=self._position.scale(Alien.__Speed)
+        self._position.setSpeed(random.random()*360, speed)
+    
     @property
     def _radius(self) -> float:
         # Note that radius is the one used for collisions - and we make the contact area just a bit smaller
@@ -36,7 +39,7 @@ class Alien(MobileGameObject):
         (sizeX, sizeY) = shipImage.get_size()
         (cx,cy) = self._position.getPosition()
         self._window.blit(shipImage, (cx - sizeX/2, cy - sizeY/2))
-    
+
     def __shoot(self) -> None:
         d = random.random()*360
         b = Bullet(self._window, 'aliens', self._position.launch(self._position.scale(Alien.__BulletSpeed), d))
