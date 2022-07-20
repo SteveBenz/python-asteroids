@@ -6,7 +6,6 @@
 # TODO:
 #   Make Big UFO's appear
 #   Make Small UFO's appear
-#   Make UFO's appear from the edge
 #   Make UFO's be big or small
 #   Make big UFO's be worth points and small UFO's be worth more points
 #   Make small UFO's be sharpshooters
