@@ -45,8 +45,14 @@ class Alien(MobileGameObject):
         b = Bullet(self._window, 'aliens', self._position.launch(self._position.scale(Alien.__BulletSpeed), d))
         AsteroidsEvent.PostAddEvent(b)
 
+    def __jink(self) -> None:
+        speed=self._position.scale(Alien.__Speed)
+        self._position.setSpeed(random.random()*360, speed)
+
     def update(self, events: list[Event]) -> None:
         self._position.coast()
         if random.random() <= .01:
             self.__shoot()
+        if random.random() <= .005:
+            self.__jink()
         super().update(events)
