@@ -6,6 +6,10 @@
 # TODO:
 #   Make Big UFO's appear
 #   Make Small UFO's appear
+#   Make UFO's appear from the edge
+#   Make UFO's be big or small
+#   Make big UFO's be worth points and small UFO's be worth more points
+#   Make small UFO's be sharpshooters
 #   Make sounds
 #   Give bonus for wave clear
 #   Make the asteroids look better
@@ -16,6 +20,7 @@
 # TickyTack:
 #   Shouldn't score for asteroids blown up by aliens?
 
+import random
 import pygame
 from pygame.event import Event
 from Asteroid import Asteroid
@@ -43,7 +48,6 @@ class AsteroidsGame:
         self.__objects.clear()
         self.__objects.append(Score(self.__window))
         self.__objects.append(Ship(self.__window))
-        self.__objects.append(Alien(self.__window))
         for _ in range(1):
             a = Asteroid.CreateStartAsteroid(self.__window)
             self.__objects.append(a)
@@ -63,6 +67,7 @@ class AsteroidsGame:
 
     def __update(self, events: list[Event]) -> None:
         self.__checkForShipSpawn()
+        self.__spawnAliens()
         for event in events:
             asteroidsEvent = AsteroidsEvent.TryGetFromEvent(event)
             if event.type == pygame.QUIT:
@@ -125,6 +130,11 @@ class AsteroidsGame:
                 a = Asteroid.CreateStartAsteroid(self.__window)
                 self.__objects.append(a)
     
+    def __spawnAliens(self) -> None:
+        if not any([x for x in self.__objects if isinstance(x, Alien)]):
+            if random.random() <= .005:
+                self.__objects.append(Alien(self.__window))
+
     def main(self) -> None:
         pygame.display.set_caption("Asteroids")
         # pygame.display.set_icon(pygame.image.load("icon.png"))
