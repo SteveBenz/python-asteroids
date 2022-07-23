@@ -25,6 +25,9 @@ class GameObject:
     def handleResize(self, size: ScreenSize) -> None:
         return
 
+    def getScore(self) -> int:
+        return 0
+
 
 class Debris(GameObject):
     def __init__(self, window: Surface, position: MovingPoint):

@@ -75,9 +75,15 @@ class BigAlien(Alien):
     def _getShipSize(self) -> float:
         return .04
 
+    def getScore(self) -> int:
+        return 300
+
 class SmallAlien(Alien):
     def _getBulletAngle(self) -> float:
         return random.random()*360
 
     def _getShipSize(self) -> float:
         return .02
+
+    def getScore(self) -> int:
+        return 500
