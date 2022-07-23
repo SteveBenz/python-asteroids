@@ -1,16 +1,12 @@
 import pygame
 from pygame.event import Event
 from pygame.surface import Surface
+from Tweakables import Balance, Sizes, Colors
 from bullet import Bullet
 from MovingPoint import MovingPoint
 from GameObject import MobileGameObject, AsteroidsEvent
 
 class Ship(MobileGameObject):
-    __AccelerationRate = 0.00002
-    __TurnRate = 2
-    __BulletSpeed = 0.005
-    __ShipSize = 0.02
-
     def __init__(self, window: Surface):
         (cx,cy) = window.get_size()
         super().__init__(window, 'player', MovingPoint(cx/2, cy/2, 0, 0, (cx,cy)))
@@ -24,13 +20,13 @@ class Ship(MobileGameObject):
     def _radius(self) -> float:
         # Note that radius is the one used for collisions - and we make the contact area just a bit smaller
         # to not enrage players because the radius doesn't conform to the triangle of the ship
-        return self._position.scale(Ship.__ShipSize*.6)
+        return self._position.scale(Sizes.PLAYER*.6)
 
     def _draw(self) -> None:
-        sizeX = sizeY = self._position.scale(Ship.__ShipSize)
+        sizeX = sizeY = self._position.scale(Sizes.PLAYER)
         shipImage = pygame.Surface((sizeX,sizeY), pygame.SRCALPHA)
         if self.__isAccelerating == False:
-            pygame.draw.polygon(shipImage, (255,255,255),
+            pygame.draw.polygon(shipImage, Colors.PLAYER_SHIP,
                         [(sizeX, sizeY/2),
                         (0, sizeY/6),
                         (sizeX/10, sizeY/2),
@@ -49,7 +45,7 @@ class Ship(MobileGameObject):
         self._window.blit(shipImage, (cx - sizeX/2, cy - sizeY/2))
     
     def __shoot(self) -> None:
-        b = Bullet(self._window, 'player', self._position.launch(self._position.scale(Ship.__BulletSpeed), self.__direction))
+        b = Bullet(self._window, 'player', self._position.launch(self._position.scale(Balance.PLAYER_BULLET_SPEED), self.__direction))
         AsteroidsEvent.PostAddEvent(b)
 
     def update(self, events: list[Event]) -> None:
@@ -72,10 +68,10 @@ class Ship(MobileGameObject):
                 self.__shoot()
 
         if self.__isAccelerating:
-            self._position.accelerate(self._position.scale(Ship.__AccelerationRate), self.__direction)
+            self._position.accelerate(self._position.scale(Balance.PLAYER_ACCELERATION_RATE), self.__direction)
         if self.__isTurningCcw:
-            self.__direction += Ship.__TurnRate
+            self.__direction += Balance.TURN_RATE
         if self.__isTurningCw:
-            self.__direction -= Ship.__TurnRate
+            self.__direction -= Balance.TURN_RATE
         self._position.friction()
         super().update(events)

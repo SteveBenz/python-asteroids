@@ -2,6 +2,8 @@ from __future__ import annotations
 from typing import Tuple
 import math
 
+from Tweakables import Balance
+
 ScreenSize = Tuple[int, int]
 
 
@@ -49,8 +51,8 @@ class MovingPoint:
         return MovingPoint(self.__x, self.__y, dx, dy, self.__size)
     
     def friction(self) -> None:
-        self.__dx = self.__dx * .995
-        self.__dy = self.__dy * .995
+        self.__dx = self.__dx * Balance.PLAYER_FRICTION
+        self.__dy = self.__dy * Balance.PLAYER_FRICTION
 
     def setSpeed(self, direction: float, speed: float) -> None:
         directionInRadians = math.radians(direction)

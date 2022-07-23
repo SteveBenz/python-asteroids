@@ -8,6 +8,8 @@ import pygame
 from pygame.surface import Surface
 import math
 
+from Tweakables import Sizes
+
 class GameObject:
     def update(self, events: list[Event]) -> None:
         self._draw()
@@ -103,7 +105,7 @@ class MobileGameObject(GameObject):
         if self._debrisType != 'none':
             for _ in range(12 if self._debrisType == 'dots' else 6):
                 trajectory = self._position.launch(0.5 + random.random()*.5, random.random()*360)
-                d = DotDebris(self._window, trajectory) if self._debrisType == 'dots' else LineDebris(self._window, trajectory, self._position.scale(.003))
+                d = DotDebris(self._window, trajectory) if self._debrisType == 'dots' else LineDebris(self._window, trajectory, self._position.scale(Sizes.LINE_DEBRIS))
                 AsteroidsEvent.PostAddEvent(d)
 
 EventTypes = Literal['add', 'remove']

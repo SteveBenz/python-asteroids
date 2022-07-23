@@ -1,4 +1,3 @@
-from Asteroid import Asteroid
 from GameObject import GameObject, AsteroidsEvent
 from pygame.event import Event
 from pygame.surface import Surface
