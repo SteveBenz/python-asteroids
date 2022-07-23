@@ -36,6 +36,7 @@ class Debris(GameObject):
         super().__init__()
         self._position = position
         self._window = window
+        self.__age = 0
         self._gameOverTime = time.time() + 1 + random.random()*1.5
 
     def checkForCollision(self, other: GameObject) -> bool:

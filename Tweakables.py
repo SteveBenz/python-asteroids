@@ -37,6 +37,9 @@ class Balance:
     # Bullet lifetime in ticks
     BULLET_LIFETIME = 300
 
+    # How long a tick is (in seconds)
+    TICK_DURATION = 0.01
+
 class Scoring:
     BIG_ALIEN = 300
     SMALL_ALIEN = 500
@@ -49,3 +52,5 @@ class Colors:
     ALIEN_BULLET = (255,255,128)
     ALIEN_SHIP = (255,165,0)
     PLAYER_SHIP = (255,255,255)
+
+    GAME_OVER = (255,0,0)

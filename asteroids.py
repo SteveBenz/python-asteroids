@@ -21,7 +21,7 @@ from pygame.event import Event
 from Asteroid import Asteroid
 from GameObject import GameObject, AsteroidsEvent
 from Score import Score
-from Tweakables import Balance
+from Tweakables import Balance, Colors
 from aliens import Alien, BigAlien, SmallAlien
 from ship import Ship
 from pygame.font import SysFont
@@ -83,7 +83,7 @@ class AsteroidsGame:
 
     def __draw(self) -> None:
         if self.__livesCount == 0:
-            gameOverImage = self.__gameOverFont.render(f"Game Over", True, (255,0,0))
+            gameOverImage = self.__gameOverFont.render(f"Game Over", True, Colors.GAME_OVER)
             imageRect = gameOverImage.get_rect()
             (cx,cy) = self.__window.get_size()
             self.__window.blit(gameOverImage, (cx/2 - imageRect.width/2, cy/2 - imageRect.height/2))
@@ -95,7 +95,7 @@ class AsteroidsGame:
                 sx = cx * .001 # Spacing between ships in the x direction
                 px = sx  # Padding in the x direction
                 py = cy * .002 # Padding in the y direction
-                pygame.draw.polygon(self.__window, (255,255,255), [
+                pygame.draw.polygon(self.__window, Colors.PLAYER_SHIP, [
                     (px+i*(w+sx)+w/2, py),
                     (px+i*(w+sx), py+h),
                     (px+i*(w+sx)+w, py+h)], width=2)
@@ -143,7 +143,7 @@ class AsteroidsGame:
             self.__checkCollisions()
             if self.__livesCount > 0:
                 self.__checkIfWaveCleared()
-            time.sleep(.01)
+            time.sleep(Balance.TICK_DURATION)
 
 
 pygame.init()
