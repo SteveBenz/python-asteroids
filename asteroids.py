@@ -3,11 +3,7 @@
 #  py -m pip uninstall pygame
 #  py -m pip install pygame_widgets
 
-# TODO:
-#   Make Big UFO's appear
-#   Make Small UFO's appear
-#   Make UFO's be big or small
-#   Make big UFO's be worth points and small UFO's be worth more points
+#TODO:
 #   Make small UFO's be sharpshooters
 #   Make sounds
 #   Give bonus for wave clear
