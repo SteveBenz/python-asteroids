@@ -13,7 +13,13 @@ class Alien(MobileGameObject):
 
     def __init__(self, window: Surface):
         (cx,cy) = window.get_size()
-        super().__init__(window, 'aliens', MovingPoint(cx/4, cy/4, 0, 0, (cx,cy)))
+        if random.random() <= .5:
+            rx = random.random()*cx
+            ry = 0
+        else:
+            ry = random.random()*cy
+            rx = 0
+        super().__init__(window, 'aliens', MovingPoint(rx, ry, 0, 0, (cx,cy)))
         self._debrisType = 'lines'
         speed=self._position.scale(Alien.__Speed)
         self._position.setSpeed(random.random()*360, speed)
@@ -25,7 +31,7 @@ class Alien(MobileGameObject):
         return self._position.scale(Alien.__ShipSize*.6)
 
     def _draw(self) -> None:
-        sizeX = sizeY = self._position.scale(Alien.__ShipSize)
+        sizeX = sizeY = self._position.scale(self._getShipSize())
         shipImage = pygame.Surface((sizeX,sizeY), pygame.SRCALPHA)
         pygame.draw.polygon(shipImage, (255,165,0),
                     [(sizeX, sizeY/3),
@@ -40,9 +46,14 @@ class Alien(MobileGameObject):
         (cx,cy) = self._position.getPosition()
         self._window.blit(shipImage, (cx - sizeX/2, cy - sizeY/2))
 
+    def _getBulletAngle(self) -> float:
+        return 0
+
+    def _getShipSize(self) -> float:
+        return 0
+    
     def __shoot(self) -> None:
-        d = random.random()*360
-        b = Bullet(self._window, 'aliens', self._position.launch(self._position.scale(Alien.__BulletSpeed), d))
+        b = Bullet(self._window, 'aliens', self._position.launch(self._position.scale(Alien.__BulletSpeed), self._getBulletAngle()))
         AsteroidsEvent.PostAddEvent(b)
 
     def __jink(self) -> None:
@@ -56,3 +67,17 @@ class Alien(MobileGameObject):
         if random.random() <= .005:
             self.__jink()
         super().update(events)
+
+class BigAlien(Alien):
+    def _getBulletAngle(self) -> float:
+        return random.random()*360
+
+    def _getShipSize(self) -> float:
+        return .04
+
+class SmallAlien(Alien):
+    def _getBulletAngle(self) -> float:
+        return random.random()*360
+
+    def _getShipSize(self) -> float:
+        return .02

@@ -25,7 +25,7 @@ from pygame.event import Event
 from Asteroid import Asteroid
 from GameObject import GameObject, AsteroidsEvent
 from Score import Score
-from aliens import Alien
+from aliens import Alien, BigAlien, SmallAlien
 from ship import Ship
 from pygame.font import SysFont
 import time
@@ -132,7 +132,8 @@ class AsteroidsGame:
     def __spawnAliens(self) -> None:
         if not any([x for x in self.__objects if isinstance(x, Alien)]):
             if random.random() <= .005:
-                self.__objects.append(Alien(self.__window))
+                a = SmallAlien(self.__window) if random.random() < .3 else BigAlien(self.__window)
+                self.__objects.append(a)
 
     def main(self) -> None:
         pygame.display.set_caption("Asteroids")
